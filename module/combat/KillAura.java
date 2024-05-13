@@ -74,7 +74,7 @@ public class KillAura extends Module{
     			
     			List<EntityLivingBase> targets = (List<EntityLivingBase>) mc.theWorld.loadedEntityList.stream().filter(EntityLivingBase.class::isInstance).collect(Collectors.toList());
     			
-    		    targets = targets.stream().filter(entity -> entity.getDistanceToEntity(mc.thePlayer) < Range.getValDouble() && entity != mc.thePlayer && !entity.isDead && entity.getHealth() > 0).collect(Collectors.toList());
+    		    targets = targets.stream().filter(entity -> entity.getDistanceToEntity(mc.thePlayer) < Range.getValDouble() && entity != mc.thePlayer && !entity.isDead && entity.getHealth() > 0 && !entity.hasCustomName()).collect(Collectors.toList());
     		    
     		    targets.sort(Comparator.comparingDouble(entity -> ((EntityLivingBase)entity).getDistanceToEntity(mc.thePlayer)));
     		   

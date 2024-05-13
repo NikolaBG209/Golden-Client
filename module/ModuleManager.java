@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import me.nikolabg209.golden.events.Event;
 import module.combat.*;
 import module.movement.*;
+
 import module.player.*;
 import module.render.*;
 import module.ghost.*;
@@ -16,7 +17,7 @@ public class ModuleManager {
 	public ModuleManager() {
 		module = new ArrayList<Module>();
 		//COMBAT	
-		newModule(new AimBot());
+		
 		newModule(new KillAura());
 		newModule(new Velocity());
 		newModule(new OldKillAura());
@@ -30,13 +31,14 @@ public class ModuleManager {
 		newModule(new Speed());
 	    newModule(new Jesus());
 	    newModule(new NoSlow());
-	    newModule(new Fly());
+	    newModule(new Flight());
 	    newModule(new Sprint());
 	    newModule(new Spider());
 	    newModule(new Jetpack());
 	    newModule(new Dolphin());
 	    newModule(new Parkour());
 	    newModule(new AutoWalk());
+	   
 		//PLAYER
 	    newModule(new NoFall());
 	    newModule(new AntiAFK());
@@ -60,7 +62,9 @@ public class ModuleManager {
 		//MISC
 	    
 	    //GHOST
+	    newModule(new AimBot());
 	    newModule(new AutoClicker());
+	    newModule(new LegitScaffold());
 	}
 
 	
