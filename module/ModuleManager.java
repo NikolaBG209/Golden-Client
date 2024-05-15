@@ -38,6 +38,7 @@ public class ModuleManager {
 	    newModule(new Dolphin());
 	    newModule(new Parkour());
 	    newModule(new AutoWalk());
+	    newModule(new BlocksMCfly());
 	   
 		//PLAYER
 	    newModule(new NoFall());

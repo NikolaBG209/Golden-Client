@@ -22,6 +22,9 @@ public class LegitScaffold extends Module{
 	}else {
 		mc.gameSettings.keyBindSneak.pressed = false;
 	}
+	 
+		
+	
 	
 	
 	}

@@ -27,6 +27,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.network.play.client.C0APacketAnimation;
 import de.Hero.settings.Setting;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.*;
 
 
@@ -83,6 +84,8 @@ public class KillAura extends Module{
     		   
     		    if(!targets.isEmpty()) {
     		    	EntityLivingBase target = targets.get(0);
+    		    	
+    		    	
     		    	if(Golden.instance.settingsManager.getSettingByName("SilentRotation").getValBoolean()) {
     		    		// ROTATIONS
     		    		// SILENT ROTATION
