@@ -32,6 +32,6 @@ public class ModsList extends Module{
 	public void onEnable() {
 		
 	}
-		
+
 	}
 

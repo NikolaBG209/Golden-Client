@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import me.nikolabg209.golden.events.Event;
 import module.combat.*;
+import module.exploit.*;
 import module.movement.*;
 
 import module.player.*;
@@ -38,7 +39,7 @@ public class ModuleManager {
 	    newModule(new Dolphin());
 	    newModule(new Parkour());
 	    newModule(new AutoWalk());
-	    newModule(new BlocksMCfly());
+	   
 	   
 		//PLAYER
 	    newModule(new NoFall());
@@ -66,6 +67,9 @@ public class ModuleManager {
 	    newModule(new AimBot());
 	    newModule(new AutoClicker());
 	    newModule(new LegitScaffold());
+	    
+	    //EXPLOIT
+	    newModule(new Disabler());
 	}
 
 	

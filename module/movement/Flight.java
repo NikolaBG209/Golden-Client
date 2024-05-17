@@ -30,9 +30,11 @@ import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.util.AxisAlignedBB;
 
 public class Flight extends Module{
-	private boolean started;
-	private boolean notUnder;
-	private boolean clipped;
+	private double moveSpeed;
+    private boolean started;
+    private boolean notUnder;
+    private boolean clipped;
+    private boolean teleport;
 	
     public Flight() {
         super("Flight", Keyboard.KEY_G, Category.MOVEMENT);
@@ -47,7 +49,7 @@ public class Flight extends Module{
     	options.add("Motion");
     	options.add("Hypixel");
     	options.add("BlocksMC");
-    	Golden.instance.settingsManager.rSetting(new Setting(" ", this, "Creative", options));
+    	Golden.instance.settingsManager.rSetting(new Setting("Fly Mode", this, "Creative", options));
     }
     
    
@@ -56,6 +58,25 @@ public class Flight extends Module{
     public void onDisable(){
     	Invoker.setTimerSpeed(1);
     	mc.thePlayer.capabilities.isFlying = false;
+    	this.moveSpeed = 1;
+    	mc.timer.timerSpeed = 1;
+    	Invoker.setTimerSpeed(1);
+    	mc.thePlayer.motionX = 0;
+    
+    	mc.thePlayer.motionZ = 0;
+    	
+    }
+    public void onEnable() {
+    	this.moveSpeed = 0.0;
+        this.notUnder = false;
+        this.started = false;
+        this.clipped = false;
+        this.teleport = false;
+       
+        if(Golden.instance.settingsManager.getSettingByName("Fly Mode").getValString().equalsIgnoreCase("BlocksMC")) {
+        	Golden.addChatMessage(String.format("Start the fly under a block and walk forward."));
+        	 mc.timer.timerSpeed = 0.4f;
+        }
     	
     }
 
@@ -64,26 +85,26 @@ public class Flight extends Module{
     public void onEvent(Event e)  {
     	if(e instanceof EventMotion) {
     		if(e.isPre()) { 
-    			this.clipped = false;
-    			if(Golden.instance.settingsManager.getSettingByName(" ").getValString().equalsIgnoreCase("Creative")) {
+    			
+    			if(Golden.instance.settingsManager.getSettingByName("Fly Mode").getValString().equalsIgnoreCase("Creative")) {
     				mc.thePlayer.capabilities.isFlying = true;
     		}
-    			if(Golden.instance.settingsManager.getSettingByName(" ").getValString().equalsIgnoreCase("Verus")) {
+    			if(Golden.instance.settingsManager.getSettingByName("Fly Mode").getValString().equalsIgnoreCase("Verus")) {
     			//if(mc.thePlayer.moveForward > 0) {
     				//setSpeed(1, 0, 1, 0);
     			
     		//	}
     		}
-    			if(Golden.instance.settingsManager.getSettingByName(" ").getValString().equalsIgnoreCase("Collide")) {
+    			if(Golden.instance.settingsManager.getSettingByName("Fly Mode").getValString().equalsIgnoreCase("Collide")) {
     				((EventMotion) e).setOnGround(true);
     				mc.thePlayer.motionY = 0;
     			}
-    			if(Golden.instance.settingsManager.getSettingByName(" ").getValString().equalsIgnoreCase("Motion")) {
+    			if(Golden.instance.settingsManager.getSettingByName("Fly Mode").getValString().equalsIgnoreCase("Motion")) {
     				mc.thePlayer.onGround = true;
     				mc.thePlayer.motionY = 0;
     				setSpeed(1);
     			}
-    			if(Golden.instance.settingsManager.getSettingByName(" ").getValString().equalsIgnoreCase("Hypixel")) {
+    			if(Golden.instance.settingsManager.getSettingByName("Fly Mode").getValString().equalsIgnoreCase("Hypixel")) {
     				double y;
     				double y1;
     				mc.thePlayer.motionY = 0;
@@ -95,50 +116,56 @@ public class Flight extends Module{
     				y1 = mc.thePlayer.posY + 1.0E-10D;
     				mc.thePlayer.setPosition(mc.thePlayer.posX, y1, mc.thePlayer.posZ);
     			}
-    			if(Golden.instance.settingsManager.getSettingByName(" ").getValString().equalsIgnoreCase("BlocksMC")) {
-    			AxisAlignedBB bb = mc.thePlayer.getEntityBoundingBox().offset(0, 1, 0);
-    				if(!mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, bb).isEmpty()) {
-    					
-    					
-    				//if(this.notUnder && this.clipped) {
-    					this.clipped = false;
-    					this.started = true;
-    					//mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, false));
-        				//mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(mc.thePlayer.posX, mc.thePlayer.posY - 0.1, mc.thePlayer.posZ, mc.thePlayer.rotationYaw,mc.thePlayer.rotationPitch, false));
-        				//mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, false));
-    					
-    					
-    					if(mc.thePlayer.onGround){
-    					mc.thePlayer.motionY = 0.42;
-    					setSpeed(5);
-    					}if(mc.thePlayer.onGround = false) {
-    						mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, false));
-            				mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(mc.thePlayer.posX, mc.thePlayer.posY - 0.1, mc.thePlayer.posZ, mc.thePlayer.rotationYaw,mc.thePlayer.rotationPitch, false));
-            				mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, false));
+    			if(Golden.instance.settingsManager.getSettingByName("Fly Mode").getValString().equalsIgnoreCase("BlocksMC")) {
+    				
+    				 block9: {
+    	            block8: {
+    	             
+    	                AxisAlignedBB bb = mc.thePlayer.getEntityBoundingBox().offset(0.0, 1.0, 0.0);
+    	                if (!mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, bb).isEmpty() && !this.started) break block8;
+    	                 
+    	                switch(mc.thePlayer.offGroundTicks) {
+    	                    case 0: {
+    	                        if (this.notUnder && this.clipped) {
+    	                            this.started = false;
+    	                            setSpeed(8);
+    	                           mc.thePlayer.motionY = 0.42f;
+    	                            this.notUnder = false;
+    	                            break;
+    	                        }
+    	                        break block9;
+    	                    }
+    	                    case 1: {
+    	                        if (this.started) {
+    	                            setSpeed(7.6);
+    	                            break;
+    	                        }
+    	                        break block9;
+    	                    }
+    	                }
+    	                break block9;
+    	    }
+    	            this.notUnder = true;
+    	            if (this.clipped) {
+    	                return;
+    	                    }
+    	            
+    	            this.clipped = true;
+    	            mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, false));
+    	            mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(mc.thePlayer.posX, mc.thePlayer.posY - 0.1, mc.thePlayer.posZ, mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, false));
+    	            mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, false));
+    	            this.teleport = true;
+    	    
+    	       
+    	     mc.timer.timerSpeed = 0.4f;}
+    	    	}
+    	    	}
+    	
     					}
     				}
     					
     				//}	
-    				}
-    					
     				
-    			if(this.clipped = false) {
-    				mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, false));
-    				mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(mc.thePlayer.posX, mc.thePlayer.posY - 0.1, mc.thePlayer.posZ, mc.thePlayer.rotationYaw,mc.thePlayer.rotationPitch, false));
-    				mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, false));
-    			}
-    			}
-    			
-    			
-    		
-    			
-    				
-    			}
-    			
-    			
-    		}
-    	
-     
 public void setSpeed(double moveSpeed, float yaw, double strafe, double forward) {
     if (forward != 0.0D) {
         if (strafe > 0.0D) {

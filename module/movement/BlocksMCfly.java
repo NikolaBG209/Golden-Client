@@ -46,8 +46,8 @@ public class BlocksMCfly extends Module {
                 switch(mc.thePlayer.offGroundTicks) {
                     case 0: {
                         if (this.notUnder && this.clipped) {
-                            this.started = true;
-                            setSpeed(10.0);
+                            this.started = false;
+                            setSpeed(9.0);
                            mc.thePlayer.motionY = 0.42f;
                             this.notUnder = false;
                             break;
@@ -56,7 +56,7 @@ public class BlocksMCfly extends Module {
                     }
                     case 1: {
                         if (this.started) {
-                            setSpeed(9.6);
+                            setSpeed(8.6);
                             break;
                         }
                         break block9;
@@ -88,11 +88,15 @@ public class BlocksMCfly extends Module {
         this.started = false;
         this.clipped = false;
         this.teleport = false;
+        
     }
     public void onDisable() {
     	this.moveSpeed = 1;
     	mc.timer.timerSpeed = 1;
     	Invoker.setTimerSpeed(1);
+    	mc.thePlayer.motionX = 0;
+    
+    	mc.thePlayer.motionZ = 0;
     	
     }
     public void setSpeed(double moveSpeed, float yaw, double strafe, double forward) {

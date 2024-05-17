@@ -2,6 +2,6 @@ package module;
 
 public enum Category {
 	
-	COMBAT, MOVEMENT, PLAYER, RENDER, MISC, GHOST
+	COMBAT, MOVEMENT, PLAYER, EXPLOIT ,RENDER, GHOST
 
 }

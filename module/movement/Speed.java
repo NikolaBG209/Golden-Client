@@ -28,8 +28,8 @@ public class Speed extends Module{
     		if(e.isPre()) { 
 			//if(mc.thePlayer.onGround) {
 				
-				if(Golden.instance.settingsManager.getSettingByName("Mode").getValString().equalsIgnoreCase("Strafe")) {
-					setSpeed(0.3);
+				if(Golden.instance.settingsManager.getSettingByName("Speed Mode").getValString().equalsIgnoreCase("Strafe")) {
+					setSpeed(0.25);
 					if(isMoving() && mc.thePlayer.onGround) {
 				    			mc.thePlayer.jump();
 				    			//((EventMotion) e).setOnGround(true);
@@ -38,7 +38,7 @@ public class Speed extends Module{
 				
 					
 				
-				if(Golden.instance.settingsManager.getSettingByName("Mode").getValString().equalsIgnoreCase("Y-Port")) {
+				if(Golden.instance.settingsManager.getSettingByName("Speed Mode").getValString().equalsIgnoreCase("Y-Port")) {
 					mc.gameSettings.keyBindJump.pressed = true;
 					if((mc.gameSettings.keyBindForward.pressed || mc.gameSettings.keyBindRight.pressed || mc.gameSettings.keyBindLeft.pressed || mc.gameSettings.keyBindBack.pressed)) {
 						if(mc.thePlayer.onGround) {
@@ -49,7 +49,7 @@ public class Speed extends Module{
 						}
 					}
 				}
-				if(Golden.instance.settingsManager.getSettingByName("Mode").getValString().equalsIgnoreCase("Vanilla")) {
+				if(Golden.instance.settingsManager.getSettingByName("Speed Mode").getValString().equalsIgnoreCase("Vanilla")) {
 					setSpeed(0.5);	
 					if(isMoving() && mc.thePlayer.onGround) {
 						mc.thePlayer.jump();
@@ -57,7 +57,7 @@ public class Speed extends Module{
 					}
 				
 				}
-				if(Golden.instance.settingsManager.getSettingByName("Mode").getValString().equalsIgnoreCase("test")) {
+				if(Golden.instance.settingsManager.getSettingByName("Speed Mode").getValString().equalsIgnoreCase("test")) {
 					mc.thePlayer.onGround = true;
 					((EventMotion) e).setOnGround(true);
 				}
@@ -78,7 +78,7 @@ public class Speed extends Module{
 			        options.add("Strafe");
 			        options.add("Y-Port");
 			        options.add("test");
-			        Golden.instance.settingsManager.rSetting(new Setting("Mode", this, "Strafe", options));
+			        Golden.instance.settingsManager.rSetting(new Setting("Speed Mode", this, "Strafe", options));
 			       Golden.instance.settingsManager.rSetting(new Setting("Speed", this, 1, 0, 2, true));
 			        
 			       // Golden.instance.settingsManager.rSetting(new Setting("AmountZ", this, 1, 0, 2, true));

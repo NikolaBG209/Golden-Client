@@ -27,11 +27,11 @@ public class NoFall extends Module{
     public void onEvent(Event e)  {
     	if(e instanceof EventMotion) {
     		if(e.isPre()) {
-    			if(Golden.instance.settingsManager.getSettingByName("  ").getValString().equalsIgnoreCase("Packet")) {
+    			if(Golden.instance.settingsManager.getSettingByName("NoFall Mode").getValString().equalsIgnoreCase("Packet")) {
     			if(mc.thePlayer.fallDistance > 2) {
     				mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer(true));
     			}
-    			}if(Golden.instance.settingsManager.getSettingByName("  ").getValString().equalsIgnoreCase("NoGround")) {
+    			}if(Golden.instance.settingsManager.getSettingByName("NoFall Mode").getValString().equalsIgnoreCase("NoGround")) {
     				if(mc.thePlayer.fallDistance > 2) {
     				
     				//mc.thePlayer.onGround = true;
@@ -46,7 +46,7 @@ public class NoFall extends Module{
     	ArrayList<String> options = new ArrayList<String>();
     	options.add("Packet");
     	options.add("NoGround");
-    	 Golden.instance.settingsManager.rSetting(new Setting("  ", this, "Packet", options));
+    	 Golden.instance.settingsManager.rSetting(new Setting("NoFall Mode", this, "Packet", options));
     }
 }
     

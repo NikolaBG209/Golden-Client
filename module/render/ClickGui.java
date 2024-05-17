@@ -38,6 +38,11 @@ public class ClickGui extends Module{
         mc.displayGuiScreen(Golden.instance.clickGUI);
         toggle();
     }
+    public void onUpdate() {
+    	if(this.getKey() == Keyboard.KEY_NONE && this.getKey() == 0) {
+    	this.setKey(Keyboard.KEY_RSHIFT);
+    	}
+    }
     
     			
 }
