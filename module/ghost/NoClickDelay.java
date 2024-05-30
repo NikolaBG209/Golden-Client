@@ -12,7 +12,7 @@ public class NoClickDelay extends Module{
 	public void onUpdate() {
 		if(this.isToggled()) {
 			if(mc.thePlayer != null && mc.theWorld != null) {
-				mc.rightClickDelayTimer = 0;
+				mc.leftClickCounter = 0;
 			}
 		}
 	}

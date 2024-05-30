@@ -17,12 +17,16 @@ import org.lwjgl.input.Keyboard;
 import de.Hero.settings.Setting;
 import me.nikolabg209.golden.Golden;
 import me.nikolabg209.golden.events.Event;
+import me.nikolabg209.golden.events.listeners.BlockEvent;
 import me.nikolabg209.golden.events.listeners.EventMotion;
 import me.nikolabg209.golden.events.listeners.EventUpdate;
 import me.nikolabg209.golden.utils.Invoker;
 import module.Category;
 import module.Module;
 import module.ModuleManager;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -35,6 +39,10 @@ public class Flight extends Module{
     private boolean notUnder;
     private boolean clipped;
     private boolean teleport;
+    private double x;
+    private double y;
+    private double z;
+    Block block = new Block(Material.air);
 	
     public Flight() {
         super("Flight", Keyboard.KEY_G, Category.MOVEMENT);
@@ -43,13 +51,16 @@ public class Flight extends Module{
     @Override
     public void setup() {
     	ArrayList<String> options = new ArrayList<String>();
+    	options.add("Air Jump");
     	options.add("Creative");
     //	options.add("Verus");
     	options.add("Collide");
     	options.add("Motion");
     	options.add("Hypixel");
     	options.add("BlocksMC");
-    	Golden.instance.settingsManager.rSetting(new Setting("Fly Mode", this, "Creative", options));
+        Golden.instance.settingsManager.rSetting(new Setting("Motion Speed", this, 1.5, 0.1, 5,  false));
+
+    	Golden.instance.settingsManager.rSetting(new Setting("Fly Mode", this, "BlocksMC", options));
     }
     
    
@@ -98,11 +109,12 @@ public class Flight extends Module{
     			if(Golden.instance.settingsManager.getSettingByName("Fly Mode").getValString().equalsIgnoreCase("Collide")) {
     				((EventMotion) e).setOnGround(true);
     				mc.thePlayer.motionY = 0;
+    				
     			}
     			if(Golden.instance.settingsManager.getSettingByName("Fly Mode").getValString().equalsIgnoreCase("Motion")) {
     				mc.thePlayer.onGround = true;
     				mc.thePlayer.motionY = 0;
-    				setSpeed(1);
+    				setSpeed(Golden.instance.settingsManager.getSettingByName("Motion Speed").getValDouble());
     			}
     			if(Golden.instance.settingsManager.getSettingByName("Fly Mode").getValString().equalsIgnoreCase("Hypixel")) {
     				double y;
@@ -128,7 +140,7 @@ public class Flight extends Module{
     	                    case 0: {
     	                        if (this.notUnder && this.clipped) {
     	                            this.started = false;
-    	                            setSpeed(8);
+    	                            setSpeed(9);
     	                           mc.thePlayer.motionY = 0.42f;
     	                            this.notUnder = false;
     	                            break;
@@ -156,13 +168,35 @@ public class Flight extends Module{
     	            mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.rotationYaw, mc.thePlayer.rotationPitch, false));
     	            this.teleport = true;
     	    
-    	       
+    	      
     	     mc.timer.timerSpeed = 0.4f;}
     	    	}
+    			if(Golden.instance.settingsManager.getSettingByName("Fly Mode").getValString().equalsIgnoreCase("Air Jump")) {
+    				
+    		            this.y = mc.thePlayer.posY;
+    		        
+    		        if (mc.thePlayer.onGround) {
+    		            mc.thePlayer.jump();
+    		        }
+    			}
+    			BlockEvent event = new BlockEvent(world(), null, null, null, null);
+    		        if (BlockEvent.getBlock() instanceof BlockAir && (mc.thePlayer.posY < this.y + 1.0)) {
+    		            double x = BlockEvent.getBlockPos().getX();
+    		            double y = BlockEvent.getBlockPos().getY();
+    		            double z = BlockEvent.getBlockPos().getZ();
+    		           
+    		                BlockEvent.setBoundingBox(AxisAlignedBB.fromBounds(-15.0, -1.0, -15.0, 15.0, 1.0, 15.0).offset(x, y, z));
+    		            }
+    		        
+    		    }
+    			}
+    
     	    	}
+   
+    
     	
-    					}
-    				}
+    					
+    				
     					
     				//}	
     				

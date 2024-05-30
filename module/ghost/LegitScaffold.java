@@ -14,12 +14,12 @@ public class LegitScaffold extends Module{
 	if(this.isToggled()) {	
 	
 	if(mc.thePlayer.onGround && !mc.thePlayer.isSprinting() &&
-			this.mc.theWorld.getCollidingBoundingBoxes((Entity)mc.thePlayer, mc.thePlayer.getEntityBoundingBox().offset(-0.3D, -0.1D, -0.3D).offset(0.3D, -0.1D, 0.3D).expand(-0.3D, 0.0D, -0.3D)).isEmpty() 
-			) {
+			this.mc.theWorld.getCollidingBoundingBoxes((Entity)mc.thePlayer, mc.thePlayer.getEntityBoundingBox().offset(-0.3D, -0.1D, -0.3D).offset(0.3D, -0.1D, 0.3D).expand(-0.3D, 0.0D, -0.3D)).isEmpty() ) {
 		mc.gameSettings.keyBindSneak.pressed = true;
 		
 		
-	}else {
+	} else 
+	{
 		mc.gameSettings.keyBindSneak.pressed = false;
 	}
 	 

@@ -10,6 +10,7 @@ import org.lwjgl.input.Keyboard;
 import me.nikolabg209.golden.Golden;
 import me.nikolabg209.golden.events.Event;
 import me.nikolabg209.golden.events.listeners.EventMotion;
+import me.nikolabg209.golden.events.listeners.MoveInputEvent;
 import module.Category;
 import module.Module;
 import net.minecraft.client.settings.GameSettings.Options;
@@ -34,7 +35,8 @@ import net.minecraft.client.renderer.*;
 public class KillAura extends Module{
 	
 	public Timer timer = new Timer();
-	
+	private float forward;
+	MoveInputEvent moveInputEvent = new MoveInputEvent(forward, forward, toggled, toggled, forward);
 	
     public KillAura() {
         super("KillAura", 0, Category.COMBAT);
@@ -51,11 +53,13 @@ public class KillAura extends Module{
     public void setup() {
     	ArrayList<String> options = new ArrayList<String>();
     	
-        Golden.instance.settingsManager.rSetting(new Setting("Range", this, 4.0, 1.0, 6.0, true));
+        Golden.instance.settingsManager.rSetting(new Setting("Range", this, 4, 1, 6, false));
         Golden.instance.settingsManager.rSetting(new Setting("APS", this, 10.0, 1.0, 20.0, true));
         Golden.instance.settingsManager.rSetting(new Setting("NoSwing", this, false));
-        Golden.instance.settingsManager.rSetting(new Setting("SilentRotation", this, false));
-        Golden.instance.settingsManager.rSetting(new Setting("Keep Sprint", this,  false));
+        Golden.instance.settingsManager.rSetting(new Setting("SilentRotation", this, true));
+        Golden.instance.settingsManager.rSetting(new Setting("Keep Sprint", this,  true));
+        Golden.instance.settingsManager.rSetting(new Setting("Movement Fix", this, true));
+        Golden.instance.settingsManager.rSetting(new Setting("Auto Block", this, true));
        // Golden.instance.settingsManager.rSetting(new Setting("Players", this, true));
        // Golden.instance.settingsManager.rSetting(new Setting("Animals", this, false));
         //Golden.instance.settingsManager.rSetting(new Setting("Mods", this, false));
@@ -70,8 +74,12 @@ public class KillAura extends Module{
     			Setting APS = Golden.instance.settingsManager.getSettingByName("APS");
     			Setting NoSwing = Golden.instance.settingsManager.getSettingByName("NoSwing");
 
+    			ItemRenderer ItemRenderer = new ItemRenderer(mc);
     			
     			EventMotion event = (EventMotion) e;
+    			
+    			ItemRenderer.blockTransformation();
+    			ItemRenderer.func_178107_a(null);
     			
     			List<EntityLivingBase> targets = (List<EntityLivingBase>) mc.theWorld.loadedEntityList.stream().filter(EntityLivingBase.class::isInstance).collect(Collectors.toList());
     			
@@ -84,7 +92,14 @@ public class KillAura extends Module{
     		   
     		    if(!targets.isEmpty()) {
     		    	EntityLivingBase target = targets.get(0);
-    		    	
+    		    	if(Golden.instance.settingsManager.getSettingByName("Movement Fix").getValBoolean()) {
+    		    		
+    		    		ItemRenderer.blockTransformation();
+    		    		
+    		    		MovementUtils.fixMovement(moveInputEvent, (getRotations(target)[0]));
+
+    		    	}
+    		    	ItemRenderer.blockTransformation();
     		    	
     		    	if(Golden.instance.settingsManager.getSettingByName("SilentRotation").getValBoolean()) {
     		    		// ROTATIONS

@@ -20,11 +20,22 @@ public class Velocity extends Module{
     		if(e.isPre()) {
     			float horizontal = (float) Golden.instance.settingsManager.getSettingByName("Horizontal").getValDouble();
     			float vertical =  (float) Golden.instance.settingsManager.getSettingByName("Vertical").getValDouble();
-  			if(mc.thePlayer.hurtTime == mc.thePlayer.maxHurtTime) {
-    				mc.thePlayer.motionX *= (float) horizontal / 100;
-    				mc.thePlayer.motionY *= (float) vertical / 100;
-    				mc.thePlayer.motionZ *= (float) horizontal / 100;
-    			}
+    			
+  			if(mc.thePlayer.hurtTime > 0) {
+  				if(Golden.instance.settingsManager.getSettingByName("Velocity Mode").getValString().equalsIgnoreCase("Motion")) {
+  				mc.thePlayer.motionX *= horizontal / 100;
+  				
+  				
+  				
+  				mc.thePlayer.motionZ *= horizontal / 100;
+  					//mc.thePlayer.setVelocity(0, 0, 0);
+  				}
+  			}
+  				
+  					
+  			
+  				
+    			
     			
     		}
     	}
@@ -32,7 +43,9 @@ public class Velocity extends Module{
 	@Override
     public void setup() {
     	ArrayList<String> options = new ArrayList<String>();
-    	
+    	options.add("Motion");
+    	options.add("Velocity");
+    	Golden.instance.settingsManager.rSetting(new Setting("Velocity Mode", this, "Motion", options));
         Golden.instance.settingsManager.rSetting(new Setting("Horizontal", this, 90, 0, 100, true));
         Golden.instance.settingsManager.rSetting(new Setting("Vertical", this, 90, 0, 100, true));
 

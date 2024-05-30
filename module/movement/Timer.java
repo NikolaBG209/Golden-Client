@@ -32,6 +32,6 @@ public class Timer extends Module{
         
         
         
-        Golden.instance.settingsManager.rSetting(new Setting("Speed", this, 2, 1, 5, true));
+        Golden.instance.settingsManager.rSetting(new Setting("Speed", this, 2, 1, 5, false));
 }
 }

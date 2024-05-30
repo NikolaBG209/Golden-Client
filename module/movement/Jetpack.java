@@ -18,9 +18,9 @@ public class Jetpack extends Module{
 	public void onUpdate() {
 		if(this.isToggled()) {
 			if(mc.gameSettings.keyBindJump.pressed) {
-				if(Golden.instance.settingsManager.getSettingByName("Mode2").getValString().equalsIgnoreCase("Jump")) {
+				if(Golden.instance.settingsManager.getSettingByName("Jetpack Mode").getValString().equalsIgnoreCase("Jump")) {
 				mc.thePlayer.jump();
-			}else if(Golden.instance.settingsManager.getSettingByName("Mode2").getValString().equalsIgnoreCase("Motion")) {
+			}else if(Golden.instance.settingsManager.getSettingByName("Jetpack Mode").getValString().equalsIgnoreCase("Motion")) {
 				Invoker.setMotionY(0.30D);
 			}
 			}
@@ -31,7 +31,7 @@ public class Jetpack extends Module{
 	    	ArrayList<String> options = new ArrayList<String>();
 	    	options.add("Motion");
 	    	options.add("Jump");
-	    	 Golden.instance.settingsManager.rSetting(new Setting("Mode2", this, "Jump", options));
+	    	 Golden.instance.settingsManager.rSetting(new Setting("Jetpack Mode", this, "Jump", options));
 	        
 	    }
 

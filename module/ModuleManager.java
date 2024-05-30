@@ -21,6 +21,7 @@ public class ModuleManager {
 		
 		newModule(new KillAura());
 		newModule(new Velocity());
+		newModule(new Criticals());
 		newModule(new OldKillAura());
 	
 		//MOVEMENT
@@ -28,6 +29,7 @@ public class ModuleManager {
 		newModule(new Step());
 	//	newModule(new BHop());
 		newModule(new Glide());
+		newModule(new Tower());
 		newModule(new Timer());
 		newModule(new Speed());
 	    newModule(new Jesus());
@@ -47,8 +49,10 @@ public class ModuleManager {
 	    newModule(new FastBow());
 	    newModule(new Scaffold());
 	    newModule(new FastPlace());
+	   
 	    newModule(new AntiCobweb());
 	    newModule(new FastLadder());
+	    newModule(new ChestStealer());
 	    newModule(new ScaffoldRecode());
 	   
 	    
@@ -57,6 +61,9 @@ public class ModuleManager {
 	    newModule(new ESP());
 	    newModule(new ClickGui());
 	    newModule(new ModsList());
+	    newModule(new ShaderESP());
+	    newModule(new Animations());
+	    
 	    newModule(new FullBright());
 	    
 	   // newModule(new ChestESP());
@@ -66,6 +73,7 @@ public class ModuleManager {
 	    //GHOST
 	    newModule(new AimBot());
 	    newModule(new AutoClicker());
+	    newModule(new NoClickDelay());
 	    newModule(new LegitScaffold());
 	    
 	    //EXPLOIT

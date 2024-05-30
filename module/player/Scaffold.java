@@ -8,12 +8,16 @@ import org.lwjgl.input.Keyboard;
 import me.nikolabg209.golden.*;
 import me.nikolabg209.golden.events.Event;
 import me.nikolabg209.golden.events.listeners.EventMotion;
+import me.nikolabg209.golden.utils.SlotComponent;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
+import net.minecraft.network.play.server.S2FPacketSetSlot;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
@@ -21,20 +25,38 @@ import net.minecraft.util.Vec3;
 
 public class Scaffold extends Module{
 
+	private S2FPacketSetSlot S2FPacketSetSlot;
+
+	
+	
+	
+	
 	public Scaffold() {
+		
+		
+		
+		
 		super("Scaffold", Keyboard.KEY_NONE, Category.PLAYER);
 	}
 	
+	
+	
+			
+	
+			//mc.thePlayer.rotationPitch
+			//= (-75);
+			
+
 	@Override
 public void onUpdate() {
 		if(this.isToggled()) {
 	
-    			
-			Entity p = player();
-			//mc.thePlayer.rotationPitch
-			//= (-75);
-			BlockPos bp = new BlockPos(p.posX, p.getEntityBoundingBox().minY, p.posZ);
+    			ItemStack itemStack = mc.thePlayer.inventory.getStackInSlot(1);
+	Entity p = player();
+		BlockPos bp = new BlockPos(p.posX, p.getEntityBoundingBox().minY, p.posZ);
 			
+	
+				
 			// BLOCK PLACEMENT DIRECTIONS 
 			
              if(valid(bp.add(0, -2, 0))){
@@ -44,23 +66,19 @@ public void onUpdate() {
              }else if (valid(bp.add(-1, -1, 0))){
 				
 				place(bp.add(0, -1, 0), EnumFacing.EAST);
-				mc.thePlayer.rotationPitch = (75.5F);
-				mc.thePlayer.rotationYaw = (135);
+				
              }else if (valid(bp.add(1, -1, 0))){
 				
 				place(bp.add(0, -1, -1), EnumFacing.WEST);
-				mc.thePlayer.rotationPitch = (75);
-				mc.thePlayer.rotationYaw = (45);
+				
              }else if (valid(bp.add(0, -1, -1))){
 				
 				place(bp.add(0, -1, 0), EnumFacing.SOUTH);
-				mc.thePlayer.rotationPitch = (75.5F);
-				mc.thePlayer.rotationYaw = (-135);
+				
              }else if (valid(bp.add(0, -1, 1))){
 				
 				place(bp.add(0, -1, 0), EnumFacing.NORTH);
-				mc.thePlayer.rotationPitch = (75.5F);
-				mc.thePlayer.rotationYaw = (45);
+				
              }else if (valid(bp.add(1, -1, 1))) {
 				
 				if(valid(bp.add(0, -1, 1)))
@@ -87,33 +105,29 @@ public void onUpdate() {
 	// PLACEMENT METHOD
 	
 	void place(BlockPos p, EnumFacing f) {
-		if(f == EnumFacing.UP){
+		if(f == EnumFacing.UP)
 			
 			
-			p = p.add(0, -1, 0);
+			//p = p.add(0, -1, 0);
+		mc.thePlayer.sendQueue.addToSendQueue(new C08PacketPlayerBlockPlacement(SlotComponent.getItemStack()));
 			//mc.thePlayer.rotationPitch = (75.5F);
 			//mc.thePlayer.rotationYaw = (45);
 			
-		}else if(f == EnumFacing.NORTH) {
+		else if(f == EnumFacing.NORTH) 
 			p = p.add(0, 0, 1);
-			mc.thePlayer.rotationPitch = (75.5F);
-			mc.thePlayer.rotationYaw = (45);}
-	else if(f == EnumFacing.EAST){
-			p = p.add(-1, 0, 0);
-			mc.thePlayer.rotationPitch = (75.5F);
-			mc.thePlayer.rotationYaw = (135);
-	}
-	else if(f == EnumFacing.SOUTH){
-			p = p.add(0, 0, -1);
-			mc.thePlayer.rotationPitch = (75.5F);
-			mc.thePlayer.rotationYaw = (-135);}
 			
-	else if(f == EnumFacing.WEST){
-	   mc.thePlayer.rotationPitch = (75);
-		mc.thePlayer.rotationYaw = (45);
+	else if(f == EnumFacing.EAST)
+			p = p.add(-1, 0, 0);
+			
+	else if(f == EnumFacing.SOUTH)
+			p = p.add(0, 0, -1);
+			
+			
+	else if(f == EnumFacing.WEST)
+	   
 			p = p.add(1, 0, 0);
 	
-	}
+	
 		EntityPlayerSP _p = player();
 		
 		if(_p.getHeldItem() != null && _p.getHeldItem().getItem() instanceof ItemBlock) {

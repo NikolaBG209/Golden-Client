@@ -29,6 +29,7 @@ public class Speed extends Module{
 			//if(mc.thePlayer.onGround) {
 				
 				if(Golden.instance.settingsManager.getSettingByName("Speed Mode").getValString().equalsIgnoreCase("Strafe")) {
+					strafe(1);
 					setSpeed(0.25);
 					if(isMoving() && mc.thePlayer.onGround) {
 				    			mc.thePlayer.jump();
